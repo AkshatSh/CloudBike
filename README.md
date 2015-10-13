@@ -2,14 +2,14 @@
 
 Analyze your bike trips to improve your performance. 
 
-# Contributors:
+### Contributors:
 
-Akshat Shrivastava
+-Akshat Shrivastava
 
-Robby Mitchell
+-Robby Mitchell
 
-Cedric Ith
+-Cedric Ith
 
-Trevor Hedges
+-Trevor Hedges
 
 Dubhacks Fall 15
