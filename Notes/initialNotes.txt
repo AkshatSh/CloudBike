@@ -1,0 +1,28 @@
+DubHax:
+
+General Notes:
+  1. Bluetooth stream to the phone. Communicating to bluetooth to phone. This is the arduino part.
+  2. So find a place to mount the arduino/batteries/light sensor strip.
+  3. Time estimate: 7-8 worst case scenario.
+  4. Meet at 2:30pm Engineering Library.
+  5. Akshat and Cedric meet up to discuss web stuff at HUB
+  6. Trevor and Robby meet up to get bike geared up after Engineering Library meeting at the Makerspace.
+
+Website Notes:
+  1. Hella work, so as soon as Akshat and Robby are done, help Cedric with layout.
+  2. Cedric should do before the Hackathon:
+	     Find a map that is interactive and can be drawn on if possible.
+	     Draw up a basic plan for the website layout
+	     Learn how to do Facebook authentication online (login with Facebook)
+  3. Robby work on app for android that feeds data to server. (post request to an address).
+  4. Akshat sets up a webserver.
+  5. Look into recruiting Joseph for Android Dev. and extra help with website.
+
+Bare Minimum:
+  1. Basic mount on the bike with light strip.
+  2. App has no features, only play and pause button for sending data. Data has to include bike data (speed, rpms) and cell data (gps).
+  3. Server analyze the data, store it.
+  4. Website: Display the data (no login, no BS, just the map).
+As soon as this is done, add hella features.
+
+Name: Cloudbike
