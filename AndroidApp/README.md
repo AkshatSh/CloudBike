@@ -7,6 +7,7 @@
 #### To-Do:
 1. Setup a basic application with Play/Pause button.
 2. Add a listener for the Bluetooth Stream
+  * Add login functionality tied to Facebook.
   * Grab data from the bluetooth stream
   * Set a time-interval for the stream.
   * Temporarily store data.
@@ -19,7 +20,8 @@
   * Play resumes the listener, resets time-interval and sends last package on press.
 5. Add extra features if time allows.
   * Add a time-interval slider that the user can adjust.
-  * Add login functionality tied to Facebook.
+  * Calculate calories.
+  * Heartrate data getting wearable tech, setup with a smartwatch.
   * Clean up UI.
 
 Dubhacks Fall 15
