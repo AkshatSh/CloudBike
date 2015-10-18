@@ -2,33 +2,168 @@
 <html>
 	<head>
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+	<!--	<script type="text/javascript" src="../jquery.countupcircle.js"></script>
+		<script src="//code.jquery.com/jquery-1.10.2.js"></script>
+		<script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script> -->
 		<link rel="stylesheet" type="text/css" href="css/style.css"/>
 		<script src="js/script.js" type="text/javascript"></script>
 		<title>Cloud Bike</title>
 		<meta name="viewport" content="initial-scale=1.0, user-scalable=no">
 		<meta charset="UTF-8">
+		<script type="text/javascript" src="js/cb_utils.js"></script>
 		<script
         src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false"></script>
 		<script>
 			google.maps.visualRefresh = true;
+			var routes_list = getMenuData();
+			var newRL = [];
+			var currIndex;
 
+			getMenuItems(function () {
+				var data = JSON.parse(this.responseText);
+				for (var i = 0; i < data.userRoutes.length; i++) {
+					newRL.push(data.userRoutes[i].id);
+				}
+				console.log(newRL);
+				currIndex = newRL.length - 1;
+				routeId = newRL[currIndex];
+			})
+			
+			var flightPath;
+			var routeID = "56242dd5b6ca65832a1edb76";
+			// newRL[currIndex];
 			var map;
 			function initialize() {
 				var mapOptions = {
-					zoom: 16,
+					zoom: 17,
 					center: new google.maps.LatLng(47.654781, -122.307929),
 					mapTypeId: google.maps.MapTypeId.ROADMAP
 				};
 				map = new google.maps.Map(document.getElementById('map'), mapOptions);
+				cedricgetRouteData(routeID);
+			}
+
+			function cedricgetRouteData(routeid) {
+			    getRoute(routeid, function() {
+				    var data = JSON.parse(this.responseText);
+				    console.log(data);
+				    var arr = data.data;
+				    var date =  "" + data.startTime;
+				    console.log(date);
+				    var coor = [];
+				    var speed = [];
+				    for (var i = 0; i < arr.length; i++) {
+				    	coor.push({lat: arr[i].lat, lng: arr[i].lng});
+				    	speed.push(arr[i].speed);
+				    }
+
+					  flightPath = new google.maps.Polyline({
+					    path: coor,
+					    geodesic: true,
+					    strokeColor: '#00D0EA',
+					    strokeOpacity: 1.0,
+					    strokeWeight: 2
+					  });
+					  //$('#ride_date').innerHTML = date;
+					  document.getElementById('ride_date').innerHTML = parseDate(date);
+					  speedGraph(speed);
+					  flightPath.setMap(map);
+					  $('#loader').hide();
+					  $('#ride_results').show();
+				});
+			}
+
+			function parseDate(date) {
+				var splitDate = date.split(" ");
+				return splitDate[0] + " - " + splitDate[1] + " " + splitDate[2] + ", " + splitDate[splitDate.length - 1] + " - " + parseTime(splitDate[3]);
+			}
+
+			function parseTime(time) {
+				var splitTime = time.split(":");
+				return splitTime[0] + ":" + splitTime[1];
+			}
+
+			function speedGraph (speedArr) {
+				$(function () {
+				    $('#container').highcharts({
+				        title: {
+				            text: 'Speed',
+				            x: -20 //center
+				        },
+				        subtitle: {
+				            text: '',
+				            x: -20
+				        },
+				        xAxis: {
+				            title: {
+				                text: 'Time (minutes)'
+				            },
+				            categories: ['5', '10', '15', '20', '25', '30',
+				                '35', '40', '45', '50', '55', '60']
+				        },
+				        yAxis: {
+				            title: {
+				                text: 'Speed (meters/second)'
+				            },
+				            plotLines: [{
+				                value: 0,
+				                width: 1,
+				                color: '#808080'
+				            }]
+				        },
+				        tooltip: {
+				            valueSuffix: 'm/s'
+				        },
+				        legend: {
+				            layout: 'vertical',
+				            align: 'right',
+				            verticalAlign: 'middle',
+				            borderWidth: 0
+				        },
+				        series: [{
+				            name: 'User',
+				            data: speedArr
+				        }]
+				    });
+				});
+			}
+
+			function goLeft() {
+				if (currIndex) {
+					$('#ride_results').hide();
+					$('#loader').show();
+					flightPath.setMap(null);
+					currIndex--;
+					routeID = newRL[currIndex];
+					cedricgetRouteData(routeID);
+				}
+			}
+
+			function goRight() {
+				if (currIndex < newRL.length - 1) {
+					$('#ride_results').hide();
+					$('#loader').show();
+					flightPath.setMap(null);
+					currIndex++;
+					routeID = newRL[currIndex];
+					cedricgetRouteData(routeID);
+				}
 			}
 
 			google.maps.event.addDomListener(window, 'load', initialize);
 		</script>
+
+		<!-- <script type="text/javascript"> 
+  //           $(document).ready(function(){
+  //               $('#count-box').CountUpCircle({
+  //                   duration: 2000,
+  //                   opacity_anim: true,
+  //                   step_divider: 2
+  //               });
+  //           });
+  //       </script> -->
 	</head>
 	<body>
-		
-    
-
 		<div id="mainpage_body">
 			<div id="navbar_container">
 				<div id="navbar_logo_container">
@@ -37,7 +172,10 @@
 					</a>
 				</div>
 				<div id="aboutus_button">
-					<img src="images/up_arrow.png" id="up_arrow">
+					<!-- <img src="images/up_arrow.png" id="up_arrow"> -->
+					<a href="about_us.html">
+						<img src="images/cloud_logo.png" id="cloud">
+					</a>
 				</div>
 				<div id="fb_account">
 					<!-- <span>What's up, dubhacks15!</span> -->
@@ -47,30 +185,56 @@
 				<div id="stats_sidebar">
 					<div id="ride_id_outter">
 						<div id="ride_id_inner">
-							<img src="images/side_arrow.png">
-							<span>Saturday October 17, 2015</span>
-							<img src="images/side_arrow.png" id="right_arrow">
+							<img src="images/side_arrow.png" onclick="goLeft()">
+							<span id="ride_date">Date</span>
+							<img src="images/side_arrow.png" id="right_arrow" onclick="goRight()">
 						</div>
 					</div>
-					<span id="ride_results_title">your Ride Results</span>
-					<hr noshade size=1>
-					<div id="data_container">
-						<div id="speed_graph" class="graph">
-							 <script src="http://code.highcharts.com/highcharts.js"></script>
-							<script src="http://code.highcharts.com/modules/exporting.js"></script>
+					<img src="images/loader.gif" id="loader">
+					<div id="ride_results">
+						<span id="ride_results_title">your Ride Results</span>
+						<hr noshade size=1>
+						<div id="data_container">
+							<div id="distance_graph" class="graph">
+								 <script src="http://code.highcharts.com/highcharts.js"></script>
+								<script src="http://code.highcharts.com/modules/exporting.js"></script>
 
-							<div id="chart">
-								<div id="container" style="min-width: 37vw; height: 400px; margin: 0 auto"></div>
+								<div id="chart">
+									<div id="container" style="min-width: 35vw; height: 400px; margin: 0 auto"></div>
+								</div>
 							</div>
-						</div>
-						<div class="margin"></div>
-						<div id="distance_graph" class="graph">
-							<div id="chart">
-								<div id="container2" style="min-width: 37vw; height: 400px; margin: 0 auto"></div>
+							<div class="margin"></div>
+							<div id="speed_graph" class="graph">
+								<div id="chart">
+									<div id="container2" style="min-width: 35vw; height: 400px; margin: 0 auto"></div>
+								</div>
 							</div>
+							<div class="margin"></div>
+
+						<!--	<script>
+								var START_DATE = new Date("July 27, 2010 13:30:00"); // put in the starting date here
+								var INTERVAL = 1; // in seconds
+								var INCREMENT = 9000; // increase per tick
+								var START_VALUE = 0; // initial value when it's the start date
+								var count = 0;
+
+								window.onload = function()
+								{
+								 var msInterval = INTERVAL * 1000;
+								 var now = new Date();
+								 count = parseInt((now - START_DATE)/msInterval) * INCREMENT + START_VALUE;
+								 document.getElementById('counter').innerHTML = count;
+								 setInterval("count += INCREMENT; document.getElementById('counter').innerHTML = count;", msInterval);
+								}
+							</script>
+
+							<div class="wrapper">
+					           <div id="count-box">19</div> 
+					        </div> -->
+
 						</div>
-						<div class="margin"></div>
 					</div>
+					
 				</div>
 				<div id="map"></div>
 			</div>
