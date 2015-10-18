@@ -3,7 +3,6 @@ package com.example.joseph.cloudbikebackend;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.lang.reflect.Method;
-<<<<<<< HEAD
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -16,7 +15,6 @@ import android.os.Build;
 import android.os.Handler;
 import android.util.Log;
 import android.widget.ArrayAdapter;
-=======
 import java.util.UUID;
 
 import com.example.joseph.cloudbikebackend.R;
@@ -33,7 +31,6 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.Toast;
->>>>>>> a0cce49... BackendManager, Bluetooth Manager started, BandManager completed
 
 /**
  * Created by Joseph on 10/17/15.
@@ -45,7 +42,6 @@ public class BluetoothManager {
     private static final String TAG = "BluetoothManager";
 
     /**
-<<<<<<< HEAD
      * Recieve message constant
      */
     private final int RECIEVE_MESSAGE = 1;        // Status  for Handler
@@ -220,11 +216,4 @@ public class BluetoothManager {
 
         return s;
     }
-=======
-     * BluetoothAdapter
-     */
-    private BluetoothAdapter bluetoothAdapter;
-    private BluetoothSocket bluetoothSocket;
-    private OutputStream outputStream;
->>>>>>> a0cce49... BackendManager, Bluetooth Manager started, BandManager completed
 }
