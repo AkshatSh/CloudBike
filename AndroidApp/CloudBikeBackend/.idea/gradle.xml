@@ -10,6 +10,7 @@
           <set>
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/app" />
+            <option value="$PROJECT_DIR$/microsoft-band-1.3.10929.1" />
           </set>
         </option>
       </GradleProjectSettings>
