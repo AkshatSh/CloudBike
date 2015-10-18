@@ -54,8 +54,6 @@ var router = express.Router();
 // middleware to use for all requests
 router.use(function(req, res, next) {
 	// do logging
-	res.header("Access-Control-Allow-Origin", "*");
-  	res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
 	console.log('API Being Accessed');
 	next();
 });
@@ -86,8 +84,11 @@ router.route('/route/:route_id')
 			if (!target) {
 				res.json({error: "no data found"});
 			} else {
+
 				res.json(target);
 			}
+
+			res.send();
 		});
 		/*cbBikeEntry.findById(req.params.route_id, function (err, route) {
 			if (err) {
@@ -105,7 +106,9 @@ router.route('/routes')
 			var resultData = {
 				userRoutes : allroutes
 			};
+
 			res.json(resultData);
+			res.send();
 		})
 	});
 
@@ -134,10 +137,7 @@ router.route('/route')
 
 			// Array of JSON objects with data such as 
 			// lat, long, rpm, heart rate and so forth 
-			data: req.body.bikeData,
-
-			// array of objects
-			rpmData: req.body.rpmData
+			data: req.body.bikeData
 		};
 
 		insertDocument(db, 'documents', req, res, {recievedData}, function (err, data) {
