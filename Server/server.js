@@ -53,11 +53,32 @@ router.route('/route/:route_id')
 		//console.log(req);
 		console.log(req.params.route_id);
 		var documents = db.collection('documents');
-		var resultABC = documents.find({_id: '562330a11f8dd3d912875ab6'}).toArray(function(err, items) {console.log(items)});//{_id : req.params.route_id});
-		//console.log(result);
-		console.log(resultABC);
-		//res.json(resultABC);
-		res.send();
+		var TOPitems = [];
+		var resultABC = documents.find().toArray(function(err, items) {
+			console.log("items here");
+			console.log(items);
+			TOPitems = items;
+			var target = null;
+			for (var i = 0; i < TOPitems.length; i++) {
+				if (TOPitems[i]._id == req.params.route_id) {
+					target = TOPitems[i];
+				}
+			}
+			//{_id : req.params.route_id});
+			console.log(target);
+
+			if (!target) {
+				res.json({error: "no data found"});
+			} else {
+
+				res.json(target);
+				//console.log(result);
+				console.log(resultABC);
+				//res.json(resultABC);
+			}
+
+			res.send();
+		});
 		/*cbBikeEntry.findById(req.params.route_id, function (err, route) {
 			if (err) {
 				res.send(err);
@@ -71,6 +92,9 @@ router.route('/route')
 		//var tempcbBikeEntry = new cbBikeEntry();
 		//tempcbBikeEntry.name = req.body.name;
 		//onsole.log(tempcbBikeEntry);
+		console.log("body start");
+		console.log(req.body);
+		console.log("body end");
 		var recievedData = {
 			name : req.body.name,
 			time: req.body.time,
