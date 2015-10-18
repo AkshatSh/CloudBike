@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
@@ -77,10 +79,14 @@ public class BluetoothManager {
     // MAC-address of Bluetooth module
     private static String address = "98:D3:31:70:4F:DA";
 
+    // bluetooth reading object
+    private BluetoothReading bluetoothReading;
+
     /**
      * Constructor
      */
     public BluetoothManager() {
+        BluetoothReading bluetoothReading = new BluetoothReading();
         bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         stringBuilder = new StringBuilder();
 
@@ -195,7 +201,8 @@ public class BluetoothManager {
                             String sbprint = stringBuilder.substring(0, endOfLineIndex);    /* extract string */
                             stringBuilder.delete(0, stringBuilder.length());                /* and clear */
                         }
-                        Log.d(TAG, "String: "+ stringBuilder.toString());
+                        Date now = new Date();
+                        bluetoothReading.addToList(stringBuilder.toString(), now);
                         break;
                 }
             };
@@ -215,5 +222,9 @@ public class BluetoothManager {
         }
 
         return s;
+    }
+
+    public BluetoothReading getBluetoothReading() {
+        return bluetoothReading;
     }
 }
