@@ -51,22 +51,18 @@ public class TripManager extends Activity implements GoogleApiClient.ConnectionC
     long updatedTime = 0L;
     private TextView timerValue;
 
-
+    private BluetoothReading bluetoothReading;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.trip_manager);
-        myBluetooth = new BluetoothManager();
-
-
 
         Button start = (Button) findViewById(R.id.startBtn);
         start.setOnClickListener(
                 new Button.OnClickListener() {
                     public void onClick(View v) {
-                        new LongOperation().execute("");
+
                         mGoogleApiClient = new GoogleApiClient.Builder(TripManager.this)
                                 .addApi(LocationServices.API)
                                 .addConnectionCallbacks(TripManager.this)
@@ -82,7 +78,6 @@ public class TripManager extends Activity implements GoogleApiClient.ConnectionC
                 }
         );
 
-
         Button end = (Button) findViewById(R.id.endTrip);
         end.setOnClickListener(
                 new Button.OnClickListener() {
@@ -96,9 +91,14 @@ public class TripManager extends Activity implements GoogleApiClient.ConnectionC
                         timeInMilliseconds = 0L;
                         timeSwapBuff = 0L;
                         updatedTime = 0L;
+                        bluetoothReading = myBluetooth.getBluetoothReading();
                     }
                 }
         );
+
+        myBluetooth = new BluetoothManager();
+        myBluetooth.setupRecieve();
+        myBluetooth.connectInput();
     }
 
     private class LongOperation extends AsyncTask<String, Void, String> {
@@ -130,7 +130,7 @@ public class TripManager extends Activity implements GoogleApiClient.ConnectionC
         startTime = Calendar.getInstance();
         mLocationRequest = LocationRequest.create();
         mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-        mLocationRequest.setInterval(1000); // Update location every second
+        mLocationRequest.setInterval(200); // Update location every second
 
         LocationServices.FusedLocationApi.requestLocationUpdates(
                 mGoogleApiClient, mLocationRequest, this);

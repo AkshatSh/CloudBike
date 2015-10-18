@@ -13,11 +13,13 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme" >
+        <!--
         <meta-data android:name="com.facebook.sdk.ApplicationId" android:value="@string/facebook_app_id"></meta-data>
         <activity android:name="com.facebook.FacebookActivity"
             android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
             android:theme="@android:style/Theme.Translucent.NoTitleBar"
             android:label="@string/app_name" />
+        -->
         <!-- <activity android:name=".Cloudbike" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -25,15 +27,16 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity> -->
-        <activity android:name=".MainActivity" >
+        <activity android:name=".TripManager" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <!--
         <activity android:name=".TripManager" android:label="@string/app_name">
-
         </activity>
+        -->
     </application>
 
 </manifest>

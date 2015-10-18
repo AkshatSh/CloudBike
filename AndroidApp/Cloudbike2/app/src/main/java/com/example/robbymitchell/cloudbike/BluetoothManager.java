@@ -86,12 +86,11 @@ public class BluetoothManager {
      * Constructor
      */
     public BluetoothManager() {
-        BluetoothReading bluetoothReading = new BluetoothReading();
         bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         stringBuilder = new StringBuilder();
 
-        setupRecieve();
-        connectInput();
+//        setupRecieve();
+//        connectInput();
     }
 
     /**
@@ -201,9 +200,11 @@ public class BluetoothManager {
                             String sbprint = stringBuilder.substring(0, endOfLineIndex);    /* extract string */
                             stringBuilder.delete(0, stringBuilder.length());                /* and clear */
                         }
-                        Date now = new Date();
-                        Log.d(TAG, "String: " + stringBuilder.toString());
-                        bluetoothReading.addToList(stringBuilder.toString(), now);
+                        long time = System.currentTimeMillis() % 100000;
+                        Log.d(TAG, "ZERO IS THE ROTATION: " + stringBuilder.toString()
+                                + " Time: " + time);
+                        BluetoothReading bluetoothReading = new BluetoothReading();
+                        bluetoothReading.addToList(stringBuilder.toString(), time);
                         break;
                 }
             };

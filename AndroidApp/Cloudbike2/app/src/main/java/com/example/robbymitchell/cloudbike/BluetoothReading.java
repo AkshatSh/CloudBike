@@ -7,12 +7,14 @@ import java.util.Date;
  */
 public class BluetoothReading {
     public ArrayList<String> bluetoothData;
-    public ArrayList<Date> bluetoothDate;
+    public ArrayList<Long> bluetoothDate;
 
     public BluetoothReading() {
+        bluetoothData = new ArrayList<>();
+        bluetoothDate = new ArrayList<>();
     }
 
-    public void addToList(String data, Date date) {
+    public void addToList(String data, Long date) {
         bluetoothData.add(data);
         bluetoothDate.add(date);
     }
