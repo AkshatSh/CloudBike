@@ -1,3 +1,4 @@
+// All required utils for the app 
 var express    = require('express');
 var bodyParser = require('body-parser');
 var app        = express();
@@ -6,23 +7,36 @@ var Server = mongo.Server;
 var Db = mongo.Db;
 var uriUtil = require('mongodb-uri');
 
+// connect with server
 var server = new Server('ds041154.mongolab.com', 41154, {auto_reconnect : true});
 var db = new Db('cloudbike', server);
 
 
 db.open(function(err, client) {
     client.authenticate('test', 'passw0rd!', function(err, success) {
-        // Do Something ...
+
         if (err) {
         	console.log("error " + err);
         } else {
         	console.log("success " + success);
         }
+
     });
 });
 
-var options = { server: { socketOptions: { keepAlive: 1, connectTimeoutMS: 30000 } }, 
-                replset: { socketOptions: { keepAlive: 1, connectTimeoutMS : 30000 } } };       
+var options = { server: { 
+				socketOptions: { 
+					keepAlive: 1, 
+					connectTimeoutMS: 30000 
+				} }, 
+
+                replset: { 
+                	socketOptions: { 
+                		eepAlive: 1, 
+                		connectTimeoutMS : 30000 
+                	} 
+                } 
+            };       
 
 
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -54,7 +68,7 @@ router.route('/route/:route_id')
 		console.log(req.params.route_id);
 		var documents = db.collection('documents');
 		var TOPitems = [];
-		var resultABC = documents.find().toArray(function(err, items) {
+		documents.find().toArray(function(err, items) {
 			console.log("items here");
 			console.log(items);
 			TOPitems = items;
@@ -72,9 +86,6 @@ router.route('/route/:route_id')
 			} else {
 
 				res.json(target);
-				//console.log(result);
-				console.log(resultABC);
-				//res.json(resultABC);
 			}
 
 			res.send();
@@ -87,37 +98,87 @@ router.route('/route/:route_id')
 		});*/
 	})
 
+router.route('/routes')
+	.get(function(req, res) {
+		var routes = db.collection('routes');
+		routes.find().toArray(function(err, items) {
+			var allroutes = items;
+			var resultData = {
+				userRoutes : allroutes
+			};
+
+			res.json(resultData);
+			res.send();
+		})
+	});
+
+
 router.route('/route')
 	.post(function(req, res) {
 		//var tempcbBikeEntry = new cbBikeEntry();
 		//tempcbBikeEntry.name = req.body.name;
-		//onsole.log(tempcbBikeEntry);
+		//console.log(tempcbBikeEntry);
 		console.log("body start");
 		console.log(req.body);
 		console.log("body end");
+		
 		var recievedData = {
+			// string 
 			name : req.body.name,
-			time: req.body.time,
+
+			// JAVA date object
+			startTime: req.body.startTime,
+
+			// JAVA data object
+			endTime: req.body.endTime,
+
+			// in milliseconds 
 			timeElapsed: req.body.timeElapsed,
+
+			// Array of JSON objects with data such as 
+			// lat, long, rpm, heart rate and so forth 
 			data: req.body.bikeData
-		}
-		insertDocument(db, req, res, {recievedData}, function (err, temp) {res.send()});
+		};
+
+		insertDocument(db, 'documents', req, res, {recievedData}, function (err, data) {
+			storeMenuData(db, 'routes', req, res, {data}, function () {});
+		});
+
+
+		//insertDocument(db , 'routes', req, res, {}, function(err, temp) {res.send();});
 
 	})
 app.use('/api', router);
 
+function storeMenuData(_db, collection, _req, _res, data, callback) {
+	console.log("test");
+	console.log(data.data);
 
-function insertDocument(_db, _req, _res, data, callback) {
+	var customData = {
+		id: data.data._id, 
+		time: data.data.recievedData.startTime
+	};
+
+	_db.collection(collection).insert(customData, function(err, result) {
+		if (err) {
+			console.log("err: " + err);
+		}
+		console.log('result store menu: ' + data._id);
+		_res.send();
+	});
+}
+
+function insertDocument(_db, collection, _req, _res, data, callback) {
 	console.log(data);
-    _db.collection('documents').insert(data,
+    _db.collection(collection).insert(data,
         function(err, result) {
             if(err)
             {
                 console.log('err: ' + err);
             }
-            console.log('result: ' + result);
+            console.log('result: ' + data._id);
             //assert.equal(err, null);
-            callback(null, result);
+            callback(null, data);
         });
 };
 
