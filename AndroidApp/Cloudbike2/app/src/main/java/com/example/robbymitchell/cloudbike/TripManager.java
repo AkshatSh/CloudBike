@@ -2,7 +2,10 @@ package com.example.robbymitchell.cloudbike;
 
 import android.location.Location;
 import android.app.Activity;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.SystemClock;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -38,11 +41,24 @@ public class TripManager extends Activity implements GoogleApiClient.ConnectionC
 
     private ArrayList<Location> myLocationData;
 
+    private Handler customHandler = new Handler();
+
+    private BluetoothManager myBluetooth;
+
+    long starter = 0L;
+    long timeInMilliseconds = 0L;
+    long timeSwapBuff = 0L;
+    long updatedTime = 0L;
+    private TextView timerValue;
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.trip_manager);
+        myBluetooth = new BluetoothManager();
 
 
 
@@ -50,6 +66,7 @@ public class TripManager extends Activity implements GoogleApiClient.ConnectionC
         start.setOnClickListener(
                 new Button.OnClickListener() {
                     public void onClick(View v) {
+                        new LongOperation().execute("");
                         mGoogleApiClient = new GoogleApiClient.Builder(TripManager.this)
                                 .addApi(LocationServices.API)
                                 .addConnectionCallbacks(TripManager.this)
@@ -57,11 +74,14 @@ public class TripManager extends Activity implements GoogleApiClient.ConnectionC
                                 .build();
                         TripManager.super.onStart();
                         mGoogleApiClient.connect();
+                        timerValue = (TextView) findViewById(R.id.chronometer);
+                        starter = SystemClock.uptimeMillis();
+                        customHandler.postDelayed(updateTimerThread, 0);
+
                     }
                 }
         );
 
-        Button pause;
 
         Button end = (Button) findViewById(R.id.endTrip);
         end.setOnClickListener(
@@ -70,11 +90,39 @@ public class TripManager extends Activity implements GoogleApiClient.ConnectionC
                         moveToJson();
                         mGoogleApiClient.disconnect();
                         TripManager.super.onStop();
+                        customHandler.removeCallbacks(updateTimerThread);
+                        timerValue.setText("00:00:00");
+                        starter = 0L;
+                        timeInMilliseconds = 0L;
+                        timeSwapBuff = 0L;
+                        updatedTime = 0L;
                     }
                 }
         );
     }
 
+    private class LongOperation extends AsyncTask<String, Void, String> {
+        @Override
+        protected String doInBackground(String... params) {
+            myBluetooth.setupRecieve();
+            myBluetooth.connectInput();
+
+            return "Executed";
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+
+        }
+
+        @Override
+        protected void onPreExecute() {
+        }
+
+        @Override
+        protected void onProgressUpdate(Void... values) {
+        }
+    }
 
     @Override
     public void onConnected(Bundle bundle) {
@@ -109,6 +157,7 @@ public class TripManager extends Activity implements GoogleApiClient.ConnectionC
             Map map = new HashMap();
             map.put("lat", myLocationData.get(i).getLatitude());
             map.put("lng", myLocationData.get(i).getLongitude());
+            map.put("speed", myLocationData.get(i).getSpeed());
             map.put("freeTime", myLocationData.get(i).getTime());
             list.add(map);
         }
@@ -150,4 +199,19 @@ public class TripManager extends Activity implements GoogleApiClient.ConnectionC
         }
         return json_arr;
     }
+
+    private Runnable updateTimerThread = new Runnable() {
+        public void run() {
+            timeInMilliseconds = SystemClock.uptimeMillis() - starter;
+            updatedTime = timeSwapBuff + timeInMilliseconds;
+            int secs = (int) (updatedTime / 1000);
+            int mins = secs / 60;
+            secs = secs % 60;
+            int milliseconds = (int) (updatedTime % 1000);
+            timerValue.setText("" + mins + ":"
+                    + String.format("%02d", secs) + ":"
+                    + String.format("%03d", milliseconds));
+            customHandler.postDelayed(this, 0);
+        }
+    };
 }
