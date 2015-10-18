@@ -165,13 +165,13 @@ body {
 		    flex-direction: column;
 		    align-items: center;
 
-			width: 40vw;
+			width: 44vw;
 			height: 92vh;
 			background-color: white;
 
-			/*box-shadow: 0 8px 6px -6px black;*/
+			box-shadow: 6px 0px 15px -7px #888 ;
 
-
+			overflow: scroll;
 		}
 
 			#ride_id_outter {
@@ -210,8 +210,8 @@ body {
 				}
 
 					#ride_id_inner span {
-						margin-left: 9.3vw;
-						margin-right: 9.3vw;
+						margin-left: 10vw;
+						margin-right: 10vw;
 						color: #656565;
 						font-family: Avenir;
 						font-weight: 300;
@@ -271,20 +271,9 @@ body {
 					height: 60px;
 				}
 
-				#speed_graph {
-					
-				}
-
 					.graph {
 						margin-top: 2.3vh;
 					}
-
-				#distance_graph {
-					/*height: 700px;
-					width: 500px;
-					background-color: red;
-					position: relative;*/
-				}
 
 		#map {
 			width: 66vw;
@@ -292,9 +281,13 @@ body {
 			background-color: #CBDFAA;
 
 			position: fixed;
+			z-index: 0;
 		}
 
+/*  ======== About Us =======  */
 
-
-
+#about_us_html { 
+	background: url('../images/bike-background.png') no-repeat center center fixed;
+	background-size: cover;
+}
 
