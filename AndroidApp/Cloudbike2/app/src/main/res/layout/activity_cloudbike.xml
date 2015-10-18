@@ -26,7 +26,7 @@
         android:id="@+id/welcomeView"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:fontFamily="Avenier"
-        android:textSize="50dp" />
+        android:textSize="50dp"
+        android:textColor="#ffffff" />
 
 </RelativeLayout>
