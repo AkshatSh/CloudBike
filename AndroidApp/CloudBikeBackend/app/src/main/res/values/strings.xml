@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">CloudBikeBackend</string>
+<<<<<<< HEAD
     <string name="title_activity_main">MainActivity</string>
+=======
+>>>>>>> 3cfcd2c5385503fcf2ddb462102891d7a343bde1
 </resources>
