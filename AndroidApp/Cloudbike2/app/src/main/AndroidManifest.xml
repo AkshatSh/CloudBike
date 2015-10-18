@@ -20,16 +20,13 @@
             android:theme="@android:style/Theme.Translucent.NoTitleBar"
             android:label="@string/app_name" />
         -->
-        <!-- <activity android:name=".Cloudbike" >
+        <activity android:name=".Cloudbike" >
+
+        </activity> -->
+        <activity android:name=".TripManager" android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity> -->
-        <activity android:name=".TripManager" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>

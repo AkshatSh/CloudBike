@@ -14,6 +14,7 @@ import java.util.UUID;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
+import android.content.Context;
 import android.os.Build;
 import android.os.Handler;
 import android.util.Log;
@@ -41,6 +42,7 @@ public class BluetoothManager {
     /**
      * Debugging Tag
      */
+    final BluetoothManager manager = this;
     private static final String TAG = "BluetoothManager";
 
     /**
@@ -80,7 +82,7 @@ public class BluetoothManager {
     private static String address = "98:D3:31:70:4F:DA";
 
     // bluetooth reading object
-    private BluetoothReading bluetoothReading;
+    private BluetoothReading bluetoothReading = new BluetoothReading(new ArrayList<String>(), new ArrayList<Long>());
 
     /**
      * Constructor
@@ -187,6 +189,7 @@ public class BluetoothManager {
     /**
      * public void to recieve data from arduino
      */
+
     public void setupRecieve() {
         handler = new Handler() {
             public void handleMessage(android.os.Message msg) {
@@ -194,17 +197,12 @@ public class BluetoothManager {
                     case RECIEVE_MESSAGE:                                                   /* if receive massage */
                         byte[] readBuf = (byte[]) msg.obj;
                         String strIncom = new String(readBuf, 0, msg.arg1);                 /*create string from bytes array*/
-                        stringBuilder.append(strIncom);                                     /*append string*/
-                        int endOfLineIndex = stringBuilder.indexOf("\r\n");                 /*determine the end of-line*/
-                        if (endOfLineIndex > 0) {                                           /* if end-of-line,*/
-                            String sbprint = stringBuilder.substring(0, endOfLineIndex);    /* extract string */
-                            stringBuilder.delete(0, stringBuilder.length());                /* and clear */
-                        }
+                        
                         long time = System.currentTimeMillis() % 100000;
-                        Log.d(TAG, "ZERO IS THE ROTATION: " + stringBuilder.toString()
-                                + " Time: " + time);
-                        BluetoothReading bluetoothReading = new BluetoothReading();
-                        bluetoothReading.addToList(stringBuilder.toString(), time);
+                        Log.d(TAG, strIncom);
+                        bluetoothReading.bluetoothData.add(strIncom);
+                        bluetoothReading.bluetoothDate.add(time);
+
                         break;
                 }
             };

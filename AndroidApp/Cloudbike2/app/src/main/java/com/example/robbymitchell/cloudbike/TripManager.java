@@ -26,6 +26,7 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TransferQueue;
 
 public class TripManager extends Activity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
 
@@ -58,6 +59,9 @@ public class TripManager extends Activity implements GoogleApiClient.ConnectionC
         super.onCreate(savedInstanceState);
         setContentView(R.layout.trip_manager);
 
+
+
+
         Button start = (Button) findViewById(R.id.startBtn);
         start.setOnClickListener(
                 new Button.OnClickListener() {
@@ -82,6 +86,7 @@ public class TripManager extends Activity implements GoogleApiClient.ConnectionC
         end.setOnClickListener(
                 new Button.OnClickListener() {
                     public void onClick(View v) {
+                        bluetoothReading = myBluetooth.getBluetoothReading();
                         moveToJson();
                         mGoogleApiClient.disconnect();
                         TripManager.super.onStop();
@@ -91,7 +96,8 @@ public class TripManager extends Activity implements GoogleApiClient.ConnectionC
                         timeInMilliseconds = 0L;
                         timeSwapBuff = 0L;
                         updatedTime = 0L;
-                        bluetoothReading = myBluetooth.getBluetoothReading();
+
+
                     }
                 }
         );
@@ -162,8 +168,15 @@ public class TripManager extends Activity implements GoogleApiClient.ConnectionC
             list.add(map);
         }
         JSONArray something = listmap_to_json_string(list);
+        JSONArray something2 = new JSONArray(bluetoothReading.bluetoothData);
+        JSONArray something3 = new JSONArray(bluetoothReading.bluetoothDate);
+
+
+
         Map map = new HashMap();
         map.put("bikeData", something);
+        map.put("rpmData", something2);
+        map.put("rpmTimeStamp", something3);
         map.put("startTime", startTime.getTime().toString());
         Calendar end = Calendar.getInstance();
         long timeElapsed = end.getTime().getTime() - startTime.getTime().getTime();
@@ -214,4 +227,36 @@ public class TripManager extends Activity implements GoogleApiClient.ConnectionC
             customHandler.postDelayed(this, 0);
         }
     };
+
+
+    private ArrayList<rpmObj> getRPM(List<String> nums, List<Long> times) {
+        boolean seen0 = false;
+        int last0index = 0;
+        ArrayList<rpmObj> rpms = new ArrayList();
+        long lasttime = 0;
+        for (int i = 0; i < times.size(); i++) {
+            String currNum = nums.get(i);
+            if (!seen0 && currNum.equals("0")) {
+                seen0 = true;
+                last0index = i;
+                lasttime = times.get(i);
+            } else if (seen0 && currNum.equals("0") && last0index != i - 1) {
+                double rpmTemp = 1.0 / (double)(times.get(i) - lasttime) * 1000.0 * 60.0;
+                lasttime = times.get(i);
+                rpmObj temp = new rpmObj();
+                temp.rpm = rpmTemp;
+                temp.timeStamp = times.get(i);
+                rpms.add(temp);
+            } else if (last0index == -1 && currNum.equals("0")) {
+                last0index = i;
+            }
+        }
+
+        return rpms;
+    }
+
+    private class rpmObj extends TripManager {
+        public long timeStamp;
+        public Double rpm;
+    }
 }
