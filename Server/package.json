@@ -17,12 +17,12 @@
   },
   "homepage": "https://github.com/AkshatSh/CloudBike",
   "dependencies": {
+    "body-parser": "~1.0.1",
     "coinbase": "^1.0.4",
     "express": "~4.0.0",
-    "morgan": "~1.0.0",
+    "mongodb": "^2.0.46",
+    "mongodb-uri": "^0.9.7",
     "mongoose": "~3.6.13",
-    "body-parser": "~1.0.1",
-    "mongodb": "2.14.7",
-    "mongodb-uri" : "2.14.7"
+    "morgan": "~1.0.0"
   }
 }
