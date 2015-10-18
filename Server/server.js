@@ -54,6 +54,8 @@ var router = express.Router();
 // middleware to use for all requests
 router.use(function(req, res, next) {
 	// do logging
+	res.header("Access-Control-Allow-Origin", "*");
+  	res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
 	console.log('API Being Accessed');
 	next();
 });
@@ -84,11 +86,8 @@ router.route('/route/:route_id')
 			if (!target) {
 				res.json({error: "no data found"});
 			} else {
-
 				res.json(target);
 			}
-
-			res.send();
 		});
 		/*cbBikeEntry.findById(req.params.route_id, function (err, route) {
 			if (err) {
@@ -106,9 +105,7 @@ router.route('/routes')
 			var resultData = {
 				userRoutes : allroutes
 			};
-
 			res.json(resultData);
-			res.send();
 		})
 	});
 
