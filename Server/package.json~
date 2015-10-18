@@ -1,0 +1,26 @@
+{
+  "name": "cloudbike_server",
+  "version": "1.0.0",
+  "description": "## Node.js server backend",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:AkshatSh/CloudBike.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/AkshatSh/CloudBike/issues"
+  },
+  "homepage": "https://github.com/AkshatSh/CloudBike",
+  "dependencies": {
+    "coinbase": "^1.0.4",
+    "express": "~4.0.0",
+    "morgan": "~1.0.0",
+    "mongoose": "~3.6.13",
+    "body-parser": "~1.0.1"
+  }
+}
