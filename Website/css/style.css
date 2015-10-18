@@ -1,6 +1,6 @@
-html { 
-	/*background: url('../images/bike-background.png') no-repeat center center fixed;
-	background-size: cover;*/
+#index_html { 
+	background: url('../images/bike-background.png') no-repeat center center fixed;
+	background-size: cover;
 }
 
 body { 
@@ -91,6 +91,10 @@ body {
 			margin-left: 2vw;
 			width: 33.3vw;
 		}
+
+			#navbar_logo_container a {
+				text-decoration: none;
+			}
 
 			.navbar_logo_style {
 				font-size: 45px;
