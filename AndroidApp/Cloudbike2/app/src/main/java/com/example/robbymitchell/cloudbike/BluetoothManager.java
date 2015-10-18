@@ -197,9 +197,15 @@ public class BluetoothManager {
                     case RECIEVE_MESSAGE:                                                   /* if receive massage */
                         byte[] readBuf = (byte[]) msg.obj;
                         String strIncom = new String(readBuf, 0, msg.arg1);                 /*create string from bytes array*/
-                        
-                        long time = System.currentTimeMillis() % 100000;
-                        Log.d(TAG, strIncom);
+                        stringBuilder.append(strIncom);                                     /*append string*/
+                        int endOfLineIndex = stringBuilder.indexOf("\r\n");                 /*determine the end of-line*/
+                        if (endOfLineIndex > 0) {                                           /* if end-of-line,*/
+                            String sbprint = stringBuilder.substring(0, endOfLineIndex);
+                            bluetoothReading.bluetoothData.add(sbprint);/* extract string */
+                            stringBuilder.delete(0, stringBuilder.length());                /* and clear */
+                        }
+                        Log.d(TAG, "String: "+ strIncom);
+                        long time = System.currentTimeMillis() % 10000;
                         bluetoothReading.bluetoothData.add(strIncom);
                         bluetoothReading.bluetoothDate.add(time);
 
