@@ -229,5 +229,4 @@ public class MicrosoftBandManager implements HeartRateConsentListener {
     public HeartRateQuality getHeartRateQuality() {
         return heartRateQuality;
     }
-
 }
