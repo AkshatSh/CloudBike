@@ -40,11 +40,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
             microsoftBandManager.startListening();
 //            bluetoothManager.setupRecieve();
 //            bluetoothManager.connectInput();
-
-            while(heartRate == 0) {
-                heartRate = microsoftBandManager.getHeartRate();
-            }
-
+            
             while(heartRate < 80) {
                 heartRate = microsoftBandManager.getHeartRate();
                 Log.i(TAG, "heartrate: " + heartRate);
