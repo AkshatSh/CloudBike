@@ -119,6 +119,15 @@ router.route('/route')
 		console.log(req.body);
 		console.log("body end");
 		
+		var rpmPostData = req.body.rpmData;
+		console.log(rpmPostData);
+		var rpmPostTimeStamp = req.body.rpmTimeStamp; 
+
+		var rpmFinalData = [];
+		if (rpmPostData && rpmPostTimeStamp) {
+			rpmFinalData = getRPM(rpmPostData, rpmPostTimeStamp);
+		}
+
 		var recievedData = {
 			// string 
 			name : req.body.name,
@@ -137,8 +146,10 @@ router.route('/route')
 			data: req.body.bikeData,
 
 			// array of objects
-			rpmData: req.body.rpmData
+			rpmData: rpmFinalData
 		};
+
+
 
 		insertDocument(db, 'documents', req, res, {recievedData}, function (err, data) {
 			storeMenuData(db, 'routes', req, res, {data}, function () {});
@@ -181,6 +192,29 @@ function insertDocument(_db, collection, _req, _res, data, callback) {
             callback(null, data);
         });
 };
+
+function getRPM(nums, times) {
+    var seen0 = false;
+    var last0index = 0;
+    var rpm = [];
+    var lastTime = 0;
+    for (var i = 0; i < times.length; i++) { 
+    	var currNum = nums[i];
+        if (!seen0 && currNum == "0") {
+        	seen0 = true;
+            last0index = i;
+            lastTime = times[i];
+        } else if (seen0 && currNum == "0" && last0index != i - 1) {
+        	var rpmTemp = 1 / (times[i] - lastTime) * 1000 * 60;
+        	lastTime = times[i];
+            rpm.push({rpm:rpmTemp, timestamp:times[i]});
+        } else if (last0index == i-1 && currNum == "0") {
+        	last0index = i;
+        }
+    }
+    
+    return rpm;
+}
 
 // START THE SERVER
 // =============================================================================
