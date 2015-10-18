@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html id="index_html">
+<html>
 	<head>
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 		<link rel="stylesheet" type="text/css" href="css/style.css"/>
@@ -7,11 +7,27 @@
 		<title>Cloud Bike</title>
 		<meta name="viewport" content="initial-scale=1.0, user-scalable=no">
 		<meta charset="UTF-8">
-		
+		<script
+        src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false"></script>
+		<script>
+			google.maps.visualRefresh = true;
+
+			var map;
+			function initialize() {
+				var mapOptions = {
+					zoom: 16,
+					center: new google.maps.LatLng(47.654781, -122.307929),
+					mapTypeId: google.maps.MapTypeId.ROADMAP
+				};
+				map = new google.maps.Map(document.getElementById('map'), mapOptions);
+			}
+
+			google.maps.event.addDomListener(window, 'load', initialize);
+		</script>
 	</head>
 	<body>
-		<script async defer
-        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDQGEyrv0DAksYIryx3ZQB9fkVdk1Jo2kI&callback=initMap"></script>
+		
+    
 
 		<div id="mainpage_body">
 			<div id="navbar_container">
@@ -44,13 +60,13 @@
 							<script src="http://code.highcharts.com/modules/exporting.js"></script>
 
 							<div id="chart">
-								<div id="container" style="min-width: 580px; height: 400px; margin: 0 auto"></div>
+								<div id="container" style="min-width: 37vw; height: 400px; margin: 0 auto"></div>
 							</div>
 						</div>
 						<div class="margin"></div>
 						<div id="distance_graph" class="graph">
 							<div id="chart">
-								<div id="container2" style="min-width: 580px; height: 400px; margin: 0 auto"></div>
+								<div id="container2" style="min-width: 37vw; height: 400px; margin: 0 auto"></div>
 							</div>
 						</div>
 						<div class="margin"></div>

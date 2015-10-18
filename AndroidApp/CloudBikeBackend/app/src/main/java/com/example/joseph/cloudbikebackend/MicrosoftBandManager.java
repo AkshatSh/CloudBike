@@ -59,7 +59,14 @@ public class MicrosoftBandManager implements HeartRateConsentListener {
      */
     private BandHeartRateEventListener mHeartRateEventListener;
 
+    /**
+     * Rate of HeartRate
+     */
     private int heartRate;
+
+    /**
+     * Quality of Reading from sensor
+     */
     private HeartRateQuality heartRateQuality;
 
     /**
@@ -68,6 +75,14 @@ public class MicrosoftBandManager implements HeartRateConsentListener {
      */
     public MicrosoftBandManager(Activity _activity) {
         activity = _activity;
+        mHeartRateEventListener = new BandHeartRateEventListener() {
+            @Override
+            public void onBandHeartRateChanged(BandHeartRateEvent event) {
+                // update values from reading
+                heartRate = event.getHeartRate();
+                heartRateQuality = event.getQuality();
+            }
+        };
     }
 
     /**
@@ -76,6 +91,11 @@ public class MicrosoftBandManager implements HeartRateConsentListener {
     public void connectToBand() {
         pairedBands = BandClientManager.getInstance().getPairedBands();
         client = BandClientManager.getInstance().create(activity, pairedBands[0]);
+        if(client.getSensorManager().getCurrentHeartRateConsent() != UserConsent.GRANTED) {
+            // user hasn’t consented, request consent
+            // the calling class is an Activity and implements HeartRateConsentListener
+            client.getSensorManager().requestHeartRateConsent(activity, this);
+        }
         new HeartRateSubscriptionTask().execute();
         // Note: The BandPendingResult.await() method must be called from a background thread.
         // An exception will be thrown if called from the UI thread.
@@ -192,5 +212,21 @@ public class MicrosoftBandManager implements HeartRateConsentListener {
         } catch(BandIOException ex) {
             // handle BandException
         }
+    }
+
+    /**
+     * integer of heart rate
+     * @return
+     */
+    public int getHeartRate() {
+        return heartRate;
+    }
+
+    /**
+     * HeartRateQuality
+     * @return
+     */
+    public HeartRateQuality getHeartRateQuality() {
+        return heartRateQuality;
     }
 }

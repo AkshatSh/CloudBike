@@ -3,6 +3,18 @@ package com.example.joseph.cloudbikebackend;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+import java.util.UUID;
+
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
+import android.bluetooth.BluetoothSocket;
+import android.os.Build;
+import android.os.Handler;
+import android.util.Log;
+import android.widget.ArrayAdapter;
 import java.util.UUID;
 
 import com.example.joseph.cloudbikebackend.R;
@@ -20,8 +32,6 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.Toast;
 
-import static android.support.v4.app.ActivityCompat.startActivityForResult;
-
 /**
  * Created by Joseph on 10/17/15.
  */
@@ -30,6 +40,11 @@ public class BluetoothManager {
      * Debugging Tag
      */
     private static final String TAG = "BluetoothManager";
+
+    /**
+     * Recieve message constant
+     */
+    private final int RECIEVE_MESSAGE = 1;        // Status  for Handler
 
     /**
      * BluetoothAdapter for bluetooth device manipulation
@@ -42,9 +57,19 @@ public class BluetoothManager {
     private BluetoothSocket bluetoothSocket;
 
     /**
-     * Stream for outgoing communications
+     * StringBuilder
      */
-    private OutputStream outputStream;
+    private StringBuilder stringBuilder;
+
+    /**
+     *
+     */
+    private ConnectedThread mConnectedThread;
+
+    /**
+     *
+     */
+    private Handler handler;
 
     // SPP UUID service
     private static final UUID MY_UUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
@@ -57,6 +82,10 @@ public class BluetoothManager {
      */
     public BluetoothManager() {
         bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+        stringBuilder = new StringBuilder();
+
+        setupRecieve();
+        connectInput();
     }
 
     /**
@@ -80,9 +109,9 @@ public class BluetoothManager {
     }
 
     /**
-     * public setter to try connect
+     *
      */
-    public void connect() {
+    public void connectInput() {
         Log.d(TAG, "try connect");
 
         // Set up a pointer to the remote node using it's address.
@@ -116,35 +145,17 @@ public class BluetoothManager {
         }
 
         // Create a data stream so we can talk to server.
-        Log.d(TAG, "...Create Socket...");
+        Log.d(TAG, "Create Socket");
 
-        // Get OutputStream
-        try {
-            outputStream = bluetoothSocket.getOutputStream();
-        } catch (IOException e) {
-            Log.e(TAG, "Output stream creation failed:" + e.getMessage() + ".");
-        }
+        mConnectedThread = new ConnectedThread(bluetoothSocket, handler);
+        mConnectedThread.start();
     }
 
     /**
-     * Pause Output Stream
+     *
      */
-    public void pauseOutputStream() {
-        Log.d(TAG, "Pause");
-
-        if (outputStream != null) {
-            try {
-                outputStream.flush();
-            } catch (IOException e) {
-                Log.e(TAG, "failed to flush output stream: " + e.getMessage() + ".");
-            }
-        }
-
-        try {
-            bluetoothSocket.close();
-        } catch (IOException e2) {
-            Log.e(TAG, "failed to close socket." + e2.getMessage() + ".");
-        }
+    public void startListen() {
+        mConnectedThread.write("1");
     }
 
     /**
@@ -169,18 +180,40 @@ public class BluetoothManager {
     }
 
     /**
-     * Public void to send data!
-     * @param message
+     * public void to recieve data from arduino
      */
-    public void sendData(String message) {
-        byte[] msgBuffer = message.getBytes();
+    public void setupRecieve() {
+        handler = new Handler() {
+            public void handleMessage(android.os.Message msg) {
+                switch (msg.what) {
+                    case RECIEVE_MESSAGE:                                                   /* if receive massage */
+                        byte[] readBuf = (byte[]) msg.obj;
+                        String strIncom = new String(readBuf, 0, msg.arg1);                 /*create string from bytes array*/
+                        stringBuilder.append(strIncom);                                     /*append string*/
+                        int endOfLineIndex = stringBuilder.indexOf("\r\n");                 /*determine the end of-line*/
+                        if (endOfLineIndex > 0) {                                           /* if end-of-line,*/
+                            String sbprint = stringBuilder.substring(0, endOfLineIndex);    /* extract string */
+                            stringBuilder.delete(0, stringBuilder.length());                /* and clear */
+                        }
+                        Log.d(TAG, "String: "+ stringBuilder.toString());
+                        break;
+                }
+            };
+        };
+    }
 
-        Log.d(TAG, "Send data: " + message);
+    /**
+     * Public getter of list of paired devices
+     * @return
+     */
+    public ArrayList<String> getListOfPairedDevices() {
+        Set<BluetoothDevice> pairedDevices = bluetoothAdapter.getBondedDevices();
 
-        try {
-            outputStream.write(msgBuffer);
-        } catch (IOException e) {
-            Log.e(TAG, e.getMessage());
+        ArrayList<String> s = new ArrayList<String>();
+        for (BluetoothDevice bt : pairedDevices) {
+            s.add(bt.getName());
         }
+
+        return s;
     }
 }
