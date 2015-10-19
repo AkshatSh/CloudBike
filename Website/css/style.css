@@ -17,13 +17,13 @@ body {
 	#login {
 		background-color: rgba(0, 0, 0, 0.55);
 		/* Height = 70vh - padding */
-		height: 45vh;
+		height: 40vh;
 		text-align: center;
-		padding: 15vh;
+		padding: 20vh;
 	}
 
 	.tb_margin {
-		height: 15vh;
+		height: 10vh;
 	}
 
 		#login_logo_container {
@@ -74,7 +74,7 @@ body {
 			width: 250px;
 			height: 60px;
 			line-height: 60px;
-			background-color: rgba(19, 19, 19, 0.5);
+			background-color: rgba(19, 19, 19, 0.7);
 			color: white;
 			
 			font-family: Avenir;
@@ -83,11 +83,17 @@ body {
 			border-radius: 5px;
 
 			margin-top: 40px;
-			margin-left: 570px;
+			margin-left: 520px;
+
+			trasitions: background-color 0.2s ease;
 		}
 
 		#get_started:link {
 			text-decoration: none;
+		}
+
+		#get_started:hover {
+			background-color: rgba(25, 25, 25, 0.9);
 		}
 
 /* ------ MAINPAGE ------ */
@@ -255,8 +261,8 @@ body {
 						}
 
 					#ride_date {
-						margin-left: 10.9vw;
-						margin-right: 10.9vw;
+						margin-left: 10.2vw;
+						margin-right: 10.2vw;
 						color: #656565;
 						font-family: Avenir;
 						font-weight: 300;
