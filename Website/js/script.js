@@ -38,7 +38,7 @@
 		            }]
 		        },
 		        tooltip: {
-		            valueSuffix: '°C'
+		            valueSuffix: 'rpm'
 		        },
 		        legend: {
 		            layout: 'vertical',
