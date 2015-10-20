@@ -12,5 +12,4 @@
 * CBDubHacks/app/src/main/java/TripManager.java - Java class that handles the rides that the user initiates on the app.
 
 
-# Authored By:
-*Robby Mitchell
+# Authored By: Robby Mitchell
