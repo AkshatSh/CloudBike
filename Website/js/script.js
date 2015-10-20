@@ -1,14 +1,19 @@
 (function(){
 	window.onload = function() {
+		initStyle();
 		distanceGraph();
-		speedGraph();
+		//speedGraph();
+	}
+
+	function initStyle () {
+		$('#loader').hide();
 	}
 
 	function distanceGraph () {
 		$(function () {
-		    $('#container').highcharts({
+		    $('#container2').highcharts({
 		        title: {
-		            text: 'Distance',
+		            text: 'RPM',
 		            x: -20 //center
 		        },
 		        subtitle: {
@@ -24,7 +29,7 @@
 		        },
 		        yAxis: {
 		            title: {
-		                text: 'Distance Traveled (feet)'
+		                text: 'RPM'
 		            },
 		            plotLines: [{
 		                value: 0,
@@ -33,7 +38,7 @@
 		            }]
 		        },
 		        tooltip: {
-		            valueSuffix: '°C'
+		            valueSuffix: 'rpm'
 		        },
 		        legend: {
 		            layout: 'vertical',
@@ -42,16 +47,16 @@
 		            borderWidth: 0
 		        },
 		        series: [{
-		            name: 'London',
+		            name: 'User',
 		            data: [3.9, 4.2, 5.7, 8.5, 11.9, 15.2, 17.0, 16.6, 14.2, 10.3, 6.6, 4.8]
 		        }]
 		    });
 		});
 	}
 
-	function speedGraph () {
+	function speedGraph (speedArr) {
 		$(function () {
-		    $('#container2').highcharts({
+		    $('#container').highcharts({
 		        title: {
 		            text: 'Speed',
 		            x: -20 //center
@@ -69,7 +74,7 @@
 		        },
 		        yAxis: {
 		            title: {
-		                text: 'Speed (feet/second)'
+		                text: 'Speed (meters/second)'
 		            },
 		            plotLines: [{
 		                value: 0,
@@ -87,11 +92,63 @@
 		            borderWidth: 0
 		        },
 		        series: [{
-		            name: 'Tokyo',
-		            data: [17.0, 26.9, 29.5, 24.5, 18.2, 21.5, 25.2, 16.5, 13.3, 18.3, 13.9, 9.6]
+		            name: 'User',
+		            data: speedArr
 		        }]
 		    });
 		});
 	}
 	
+	// (function ($) {
+    
+	//     $.fn.CountUpCircle = function(options){
+
+	//     	var self = this;
+		
+	// 	    /**
+	// 	    * DEFAULT OPTIONS
+	// 	    *
+	// 	    * Description
+	// 	    *
+	// 	    * @param 
+	// 	    **/
+
+	// 		var settings = $.extend({
+	// 			duration: 5000, //ms
+	// 			opacity_anim: false,
+	// 			step_divider: 1
+	// 		}, options);
+
+	// 		var toCount = parseInt(this.html());
+	// 		console.log("Count up to: " + toCount);
+
+	// 		var i 	 		 = 0;
+	// 		var step 		 = settings.duration / (toCount / settings.step_divider);
+	// 		var procent_step = 1/(toCount / settings.step_divider);
+	// 		console.log("Step duration: " + step+"ms");
+
+	// 		var displayNumber = function() {
+	// 			i=i+settings.step_divider;
+	// 			self.html(i);
+	// 			if (settings.opacity_anim){
+	// 				console.log("animate opacity");
+	// 				self.css({'opacity':procent_step*i});
+	// 			}
+	// 			if (i < toCount - settings.step_divider) {
+	// 				setTimeout(displayNumber, step);
+	// 			}
+	// 			else{
+	// 				setTimeout(set_endpoint, step);
+	// 			}
+	// 		};
+			
+	// 		var set_endpoint = function (){
+	// 			self.html(toCount);
+	// 		}
+
+	// 		displayNumber();
+	// 	}
+
+	// }
+
 })();
