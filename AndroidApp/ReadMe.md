@@ -1,4 +1,4 @@
-#### Cloudbike Android Repo
+# Cloudbike Android Repo
 
 ## Description:
   The Cloudbike Android application is capable of pulling data from our custom Arduino Tachometer or a Microsoft Band while the user is biking. The user can start a trip, during which the phone creates a JSON to store all of their ride data. At the conclusion of the trip, the JSON is sent to Cloudbike's MongoDB server for processing.
@@ -12,4 +12,4 @@
 * CBDubHacks/app/src/main/java/TripManager.java - Java class that handles the rides that the user initiates on the app.
 
 
-# Authored By: Robby Mitchell
+#### Authored By: Robby Mitchell
