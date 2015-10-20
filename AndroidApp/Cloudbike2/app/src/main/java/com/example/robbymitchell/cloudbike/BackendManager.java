@@ -42,7 +42,7 @@ public class BackendManager {
     /**
      * Private Endpoint to app
      */
-    private final String BACKEND_HOST = "http://173.250.163.33:8080/api";
+    private final String BACKEND_HOST = "http://128.95.66.3:8080/api";
 
 
     /**
