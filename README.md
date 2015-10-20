@@ -12,4 +12,6 @@ Analyze your bike trips to improve your performance.
 
 -Trevor Hedges
 
+-Joseph Zhong
+
 Dubhacks Fall 15
