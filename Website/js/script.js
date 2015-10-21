@@ -7,6 +7,18 @@
 
 	function initStyle () {
 		$('#loader').hide();
+		$('#left_arrow').hover(function(){
+			$('#ride_date').css('margin-left', '7.9vw');
+		}, function() {
+			$('#ride_date').css('margin-left', '7.7vw');
+		});
+		$('.navbar_logo_style').hover(function(){
+			$('#navbar_logo_cloud').css('text-shadow', '0px 3px 6px black');
+			$('#navbar_logo_bike').css('text-shadow', '0px 3px 6px black');
+		}, function() {
+			$('#navbar_logo_cloud').css('text-shadow', '');
+			$('#navbar_logo_bike').css('text-shadow', '');
+		});
 	}
 
 	function distanceGraph () {
