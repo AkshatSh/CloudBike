@@ -47,14 +47,16 @@
 			    getRoute(routeid, function() {
 				    var data = JSON.parse(this.responseText);
 				    console.log(data);
-				    var arr = data.data;
+				    var arr = data.rpmData;
 				    var date =  "" + data.startTime;
 				    console.log(date);
 				    var coor = [];
 				    var speed = [];
+				    var rpm = [];
 				    for (var i = 0; i < arr.length; i++) {
 				    	coor.push({lat: arr[i].lat, lng: arr[i].lng});
 				    	speed.push(arr[i].speed);
+				    	rpm.push();
 				    }
 
 					  flightPath = new google.maps.Polyline({
@@ -185,7 +187,7 @@
 				<div id="stats_sidebar">
 					<div id="ride_id_outter">
 						<div id="ride_id_inner">
-							<img src="images/side_arrow.png" onclick="goLeft()">
+							<img src="images/side_arrow.png"  id="left_arrow"onclick="goLeft()">
 							<span id="ride_date">Date</span>
 							<img src="images/side_arrow.png" id="right_arrow" onclick="goRight()">
 						</div>
@@ -200,13 +202,13 @@
 								<script src="http://code.highcharts.com/modules/exporting.js"></script>
 
 								<div id="chart">
-									<div id="container" style="min-width: 35vw; height: 400px; margin: 0 auto"></div>
+									<div id="container" style="min-width: 30vw; height: 400px; margin: 0 auto"></div>
 								</div>
 							</div>
 							<div class="margin"></div>
 							<div id="speed_graph" class="graph">
 								<div id="chart">
-									<div id="container2" style="min-width: 35vw; height: 400px; margin: 0 auto"></div>
+									<div id="container2" style="min-width: 30vw; height: 400px; margin: 0 auto"></div>
 								</div>
 							</div>
 							<div class="margin"></div>
