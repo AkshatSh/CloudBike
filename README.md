@@ -3,7 +3,7 @@
 Analyze your bike trips to improve your performance while mining bitcoin. 
 
 ###What Cloudbike does: 
-Cloudbike is a full stack data analytics platform to show users insight on their bike routes, while generating bitcoin based on the intensitiy of their excersize. 
+Cloudbike is a full stack data analytics platform to show users insight on their bike routes, while generating bitcoin based on the intensity of their exercise. 
 
 Components included an arduino board hooked onto the bike giving data about it such as RPM, Microsoft Band giving Heart Rate, Android giving geolocation along with speed, collecting all the data, and sending everything to the web server. The web server process and store the data, for the web app to pull from. The web app visualizes all the data collected. 
 
